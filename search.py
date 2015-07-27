@@ -150,7 +150,6 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
 
             print out
             if disp_inventory: print player_inventory
-            return
 
 
 if __name__ == "__main__":
