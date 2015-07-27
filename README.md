@@ -25,7 +25,16 @@ Add the following line at the end of your crontab to take a snapshot of the play
 The search program will parse the player .dat files stored by the snapshot.py program.  It takes coords of the oposite corners of a square, similar to the /fill command in Minecraft.
 
 ```sh
+# Find players in area.
 $ python search.py 100 1 100 2000 255 2000
+
+# Find players in area that has diamond_sword or more than 2 diamond_pickaxe.
+python search.py -i 100 1 100 300 255 300 diamond_sword diamond_pickaxe:2
+
+>>> [2015-07-21 23:06] ChefMumfo 100 86 130 {'diamond_pickaxe': 2}
+{'diamond_sword': 1, 'torch': 37, 'enchanted_book': 3, 'diamond_pickaxe': 2}
+>>> [2015-07-21 23:09] ChefMumfo 120 87 160 {'diamond_pickaxe': 4}
+{'diamond_sword': 1, 'torch': 37, 'enchanted_book': 2, 'diamond_pickaxe': 4, 'bread': 4}
 ```
 
 
