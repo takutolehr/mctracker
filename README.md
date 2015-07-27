@@ -24,7 +24,7 @@ $ python search.py 100 1 100 2000 255 2000
 
 
 ```sh
-usage: search.py [-h] [-i] [-d] [-e] [-n NAME_FILTER]
+usage: search.py [-h] [-i] [-d] [-e] [-n NAME_OR_UUID]
                x1 y1 z1 x2 y2 z2 [items [items ...]]
 
 positional arguments:
