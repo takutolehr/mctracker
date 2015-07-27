@@ -40,6 +40,7 @@ python search.py -i 100 1 100 300 255 300 diamond_sword diamond_pickaxe:2
 {'diamond_sword': 1, 'torch': 37, 'enchanted_book': 2, 'diamond_pickaxe': 4, 'bread': 4}
 ```
 
+###### options
 
 ```sh
 usage: search.py [-h] [-i] [-d] [-e] [-n NAME_OR_UUID]
