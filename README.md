@@ -4,6 +4,12 @@ This software is for tracking players in Minecraft servers.
 
 ### Installation
 
+Set environment variable MCSERVERDIR.
+
+```sh
+$ export MCSERVERDIR=/path/to/mcserverdir/
+```
+
 Enter following command in terminal to add a scheduled task (http://crontab.org/).
 
 ```sh
