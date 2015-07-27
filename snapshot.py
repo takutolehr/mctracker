@@ -26,12 +26,22 @@ import argparse
 import datetime
 import glob
 import os
+import re
 import shutil
 import sys
 import time
 
 NUM_SNAPSHOTS = 2000 # Number of snapshots to keep.
-SNAPSHOTS_PLAYER_CAP = 24 # Should be set to the server player cap.
+
+def extract_player_cap(prop):
+
+    with open(prop, 'r') as f:
+        for line in f.readlines():
+            m = re.search('^max-players=(\d+)', line)
+            if m: return int(m.groups()[0])
+
+    raise Exception('Failed to get server property max-players')
+
 
 def snapshot():
     """
@@ -44,6 +54,8 @@ def snapshot():
 
     if not os.path.exists(SERVERDIR): raise ValueError('Invalid SERVERDIR')
     if not os.path.exists('%s/world/playerdata/' % SERVERDIR): raise ValueError('Invalid SERVERDIR')
+    
+    SNAPSHOTS_PLAYER_CAP = extract_player_cap('%s/server.properties' % SERVERDIR)
 
     dtime = time.strftime("%Y-%m-%d %H:%M")
     players = sorted(glob.glob('%s/world/playerdata/*' % SERVERDIR), key=os.path.getmtime)
