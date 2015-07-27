@@ -17,7 +17,7 @@ $ crontab -e
 ```
 Add the following line at the end of your crontab to take a snapshot of the player.dat files every 3 minutes.
 ```sh
-*/3 * * * * /usr/bin/python /path/to/snapshot.py /path/to/minecraftserver/
+*/3 * * * * MCSERVERDIR=/path/to/serverdir/ /usr/bin/python /path/to/snapshot.py
 ```
 
 ### Usage
