@@ -155,7 +155,7 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
 
 if __name__ == "__main__":
     
-    parser = argparse.ArgumentParser(prog='tracker')
+    parser = argparse.ArgumentParser(prog='search.py')
     parser.add_argument('-i', default=False, action='store_true', dest='disp_inventory', help='display inventory')
     parser.add_argument('-d', default=False, action='store_true', dest='disable_api', help='disable mojang api call')
     parser.add_argument('-e', default=False, action='store_true', dest='include_enderchest', help='include ender chest')
