@@ -31,6 +31,7 @@ import os
 import re
 import struct
 import shutil
+import sys
 import time
 import urllib2
 
@@ -145,7 +146,7 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
                     time.sleep(1)
             if name_filter and name_filter != name: continue
 
-            out = '[%s] \x1b[1;34m%s\x1b[0m' % (dt, name)
+            out = '[%s] \x1b[1;34m%s\x1b[0m %s %s %s' % (dt, name, int(x) , int(y) , int(z))
             if items_found: out = '%s %s' % (out, str(items_found))
 
             print out
