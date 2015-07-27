@@ -94,13 +94,13 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
     disable_api:
         Disables name lookup against the Mojang's API.
     """
-    
+
     name_api_cache = {}
 
     if items: items = format_items_input(items)
 
-    for date_dir in sorted(glob.glob('tracking/*')):
-        dt = date_dir.split('/')[1]
+    for date_dir in sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR'])):
+        dt = os.path.basename(date_dir)
         
         for player_dat in sorted(glob.glob('%s/*.dat' % date_dir), key=os.path.getmtime):
 
@@ -154,6 +154,12 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
 
 if __name__ == "__main__":
     
+    if not 'MCSERVERDIR' in os.environ:
+        print 'requires environment variable MCSERVERDIR'    
+        sys.exit(0)
+
+    SERVERDIR = os.environ['MCSERVERDIR']
+
     parser = argparse.ArgumentParser(prog='search.py')
     parser.add_argument('-i', default=False, action='store_true', dest='disp_inventory', help='display inventory')
     parser.add_argument('-d', default=False, action='store_true', dest='disable_api', help='disable mojang api call')

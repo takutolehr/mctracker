@@ -27,25 +27,26 @@ import datetime
 import glob
 import os
 import shutil
+import sys
 import time
-
 
 NUM_SNAPSHOTS = 2000 # Number of snapshots to keep.
 SNAPSHOTS_PLAYER_CAP = 24 # Should be set to the server player cap.
 
-def snapshot(SERVERDIR):
+def snapshot():
     """
     Saves the player.dat files into a timestamped directory. This function should be
     called from the crontab with -s option.
     """
 
-    SNAPSHOTS_DIR = '%stracking' % SERVERDIR
+    SERVERDIR = os.environ['MCSERVERDIR']
+    SNAPSHOTS_DIR = '%s/tracking' % SERVERDIR
 
     if not os.path.exists(SERVERDIR): raise ValueError('Invalid SERVERDIR')
-    if not os.path.exists('%sworld/playerdata/' % SERVERDIR): raise ValueError('Invalid SERVERDIR')
+    if not os.path.exists('%s/world/playerdata/' % SERVERDIR): raise ValueError('Invalid SERVERDIR')
 
     dtime = time.strftime("%Y-%m-%d %H:%M")
-    players = sorted(glob.glob('%sworld/playerdata/*' % SERVERDIR), key=os.path.getmtime)
+    players = sorted(glob.glob('%s/world/playerdata/*' % SERVERDIR), key=os.path.getmtime)
 
     if not os.path.exists(SNAPSHOTS_DIR): os.makedirs(SNAPSHOTS_DIR)
     
@@ -82,8 +83,8 @@ if __name__ == "__main__":
     */5 * * * * /usr/bin/python /path/to/this/snapshot.py /path/to/minecraftserver/
     """
 
-    parser = argparse.ArgumentParser(prog='snapshot.py')
-    parser.add_argument('serverdir', help='Path to Minecraft server directory')
-    args = parser.parse_args()
-    
-    snapshot(args.serverdir)
+    if not 'MCSERVERDIR' in os.environ:
+        print 'requires environment variable MCSERVERDIR'    
+        sys.exit(0)
+
+    snapshot()
