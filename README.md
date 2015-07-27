@@ -34,7 +34,7 @@ positional arguments:
   x2              x2
   y2              y2
   z2              z2
-  items           filter by items
+  items           filter by item_id and count. ex. diamond iron_sword:2
 
 optional arguments:
   -h, --help      show this help message and exit
