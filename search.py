@@ -46,6 +46,14 @@ def extract_positions(data):
     return None
 
 
+def extract_dimension(data):
+
+    pos = data.find('\x09Dimension')
+    if pos:
+        return struct.unpack('>i', data[pos+10:pos+14])[0]
+    return 0
+
+
 def extract_items(data, include_enderchest=False):
     
     ender_start_pos = data.find('\x0aEnderItems')
@@ -146,7 +154,10 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
                     time.sleep(1)
             if name_filter and name_filter != name: continue
 
-            out = '[%s] \x1b[1;34m%s\x1b[0m \x1b[1;32m%s %s %s\x1b[0m' % (dt, name, int(x) , int(y) , int(z))
+            dimension_def = {-1:'[N]', 0:'[O]', 1:'[E]'}
+            dimension = dimension_def[extract_dimension(data)]
+            
+            out = '[%s] \x1b[1;34m%s\x1b[0m \x1b[1;31m%s\x1b[0m \x1b[1;32m%s %s %s\x1b[0m' % (dt, name, dimension, int(x) , int(y) , int(z))
             if items_found: out = '%s %s' % (out, str(items_found))
 
             print out
