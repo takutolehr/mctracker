@@ -68,7 +68,7 @@ def snapshot():
     ts_dirs = sorted(glob.glob('%s/*' % SNAPSHOTS_DIR))
     if not ts_dirs:
         os.makedirs(cur_ts_dir)
-        for player in players[-SNAPSHOTS_PLAYER_CAP:]: # Copy last 24 players
+        for player in players[-SNAPSHOTS_PLAYER_CAP:]:
             shutil.copy2(player, cur_ts_dir)
         return
 
@@ -81,7 +81,7 @@ def snapshot():
     last_ts = os.path.basename(last_ts_dir)
 
     lastrecord_t = datetime.datetime.strptime(last_ts, '%Y-%m-%d %H:%M')
-    for player in players[-SNAPSHOTS_PLAYER_CAP:]: # Copy last 24 players
+    for player in players[-SNAPSHOTS_PLAYER_CAP:]: # Only store updated files.
         if lastrecord_t < datetime.datetime.fromtimestamp(os.path.getmtime(player)):
             shutil.copy2(player, cur_ts_dir)
     
