@@ -108,12 +108,10 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
 
     if items: items = format_items_input(items)
 
-    #for date_dir in sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR'])):
-    for date_dir in ['']:
+    for date_dir in sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR'])):
         dt = os.path.basename(date_dir)
         
-        #for player_dat in sorted(glob.glob('%s/*.dat' % date_dir), key=os.path.getmtime):
-        for player_dat in sorted(glob.glob('tracking/*.dat'), key=os.path.getmtime):
+        for player_dat in sorted(glob.glob('%s/*.dat' % date_dir), key=os.path.getmtime):
 
             uuid = os.path.basename(player_dat)[:-4]
             tmp = '/tmp/%s.gz' % uuid
