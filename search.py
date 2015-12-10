@@ -67,7 +67,9 @@ def extract_items(data, include_enderchest=False):
         pos += 4 + 1
         item_id = data[pos:pos+item_id_length][10:]
 
-        item_count = int(binascii.hexlify(data[data.find('\x05Count')+7]), 16)
+        item_count_start_pos = pos + item_id_length + data[pos+item_id_length:].find('\x05Count')
+        item_count = int(binascii.hexlify(data[item_count_start_pos+6]), 16)
+
         if item_id in items:
             items[item_id] += item_count
         else:
