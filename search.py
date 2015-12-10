@@ -67,7 +67,7 @@ def extract_items(data, include_enderchest=False):
         pos += 4 + 1
         item_id = data[pos:pos+item_id_length][10:]
 
-        item_count = int(binascii.hexlify(data[data.find('\x05Count')+6]), 16)
+        item_count = int(binascii.hexlify(data[data.find('\x05Count')+7]), 16)
         if item_id in items:
             items[item_id] += item_count
         else:
@@ -108,10 +108,12 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
 
     if items: items = format_items_input(items)
 
-    for date_dir in sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR'])):
+    #for date_dir in sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR'])):
+    for date_dir in ['']:
         dt = os.path.basename(date_dir)
         
-        for player_dat in sorted(glob.glob('%s/*.dat' % date_dir), key=os.path.getmtime):
+        #for player_dat in sorted(glob.glob('%s/*.dat' % date_dir), key=os.path.getmtime):
+        for player_dat in sorted(glob.glob('tracking/*.dat'), key=os.path.getmtime):
 
             uuid = os.path.basename(player_dat)[:-4]
             tmp = '/tmp/%s.gz' % uuid
