@@ -56,24 +56,33 @@ def extract_dimension(data):
 
 def extract_items(data, include_enderchest=False):
     
+    items = {}
+    
+    inventory_start_pos = data.find('\x09Inventory')
     ender_start_pos = data.find('\x0aEnderItems')
 
-    items = {}
-    for item_id in re.finditer('\x08\x00\x02id', data):
-        pos = item_id.start() + 2
-        if not include_enderchest and pos > ender_start_pos: break
+    if inventory_start_pos < ender_start_pos:
+        inventory_data = data[inventory_start_pos:ender_start_pos]
+        ender_data = data[ender_start_pos:]
+    else:
+        inventory_data = data[inventory_start_pos:]
+        ender_data = data[ender_start_pos:inventory_start_pos]
 
-        item_id_length = int(binascii.hexlify(data[pos+4]), 16)
-        pos += 4 + 1
-        item_id = data[pos:pos+item_id_length][10:]
+    if not include_enderchest: ender_data = ''
 
-        item_count_start_pos = pos + item_id_length + data[pos+item_id_length:].find('\x05Count')
-        item_count = int(binascii.hexlify(data[item_count_start_pos+6]), 16)
+    for data in [inventory_data, ender_data]:
+        for item_id in re.finditer('\x08\x00\x02id', data):
+            pos = item_id.start() + 2
+            item_id_length = int(binascii.hexlify(data[pos+4]), 16)
+            pos += 4 + 1
+            item_id = data[pos:pos+item_id_length][10:]
+            item_count_start_pos = pos + item_id_length + data[pos+item_id_length:].find('\x05Count')
+            item_count = int(binascii.hexlify(data[item_count_start_pos+6]), 16)
 
-        if item_id in items:
-            items[item_id] += item_count
-        else:
-            items[item_id] = item_count
+            if item_id in items:
+                items[item_id] += item_count
+            else:
+                items[item_id] = item_count
 
     return items
 
