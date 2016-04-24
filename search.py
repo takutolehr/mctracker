@@ -101,7 +101,7 @@ def format_items_input(items):
     return out
 
 
-def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=False, name_filter='', include_enderchest=False):
+def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=False, name_filter='', include_enderchest=False, last_snapshots_limit=None):
     """
     Searches against the player.dat files stored in the tracking directory created by snapshot.py.
     
@@ -118,11 +118,15 @@ def search(x_pair, y_pair, z_pair, items=[], disp_inventory=False, disable_api=F
     name_api_cache = {}
 
     if items: items = format_items_input(items)
+    timestamped_dirs = sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR']))
 
-    for date_dir in sorted(glob.glob('%s/tracking/*' % os.environ['MCSERVERDIR'])):
-        dt = os.path.basename(date_dir)
+    if last_snapshots_limit and last_snapshots_limit < len(timestamped_dirs):
+        timestamped_dirs = timestamped_dirs[-last_snapshots_limit:]
+
+    for timestamped_dir in timestamped_dirs:
+        dt = os.path.basename(timestamped_dir)
         
-        for player_dat in sorted(glob.glob('%s/*.dat' % date_dir), key=os.path.getmtime):
+        for player_dat in sorted(glob.glob('%s/*.dat' % timestamped_dir), key=os.path.getmtime):
 
             uuid = os.path.basename(player_dat)[:-4]
             tmp = '/tmp/%s.gz' % uuid
@@ -188,6 +192,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', default=False, action='store_true', dest='disable_api', help='disable mojang api call')
     parser.add_argument('-e', default=False, action='store_true', dest='include_enderchest', help='include ender chest')
     parser.add_argument('-n', default='', dest='name_or_uuid', help='filter by name or uuid with -dn')
+    parser.add_argument('-l', type=int, default=None, dest='last_snapshots_limit', help='number of last snapshots to search on')
     parser.add_argument('x1', type=int, help='x1')
     parser.add_argument('y1', type=int, help='y1')
     parser.add_argument('z1', type=int, help='z1')
@@ -197,4 +202,4 @@ if __name__ == "__main__":
     parser.add_argument('items', nargs='*', help='filter by items')
     args = parser.parse_args()
 
-    search((args.x1, args.x2), (args.y1, args.y2), (args.z1, args.z2), args.items, args.disp_inventory, args.disable_api, args.name_or_uuid, args.include_enderchest)
+    search((args.x1, args.x2), (args.y1, args.y2), (args.z1, args.z2), args.items, args.disp_inventory, args.disable_api, args.name_or_uuid, args.include_enderchest, args.last_snapshots_limit)
